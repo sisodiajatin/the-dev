@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
 import { HoverPreviewLink } from './hover-link-preview'
-import { WritingPreviewCard } from './writing-preview-card'
+import { PreviewCard } from './preview-card'
+import { baseUrl } from 'app/lib/profile'
+
+const SITE_HOST = new URL(baseUrl).host
 
 type BlogPostsProps = {
   limit?: number
@@ -32,10 +35,11 @@ export function BlogPosts({ limit }: BlogPostsProps) {
           className="flex flex-col gap-figma-inside-gap group"
           href={`/blog/${post.slug}`}
           preview={
-            <WritingPreviewCard
+            <PreviewCard
               title={post.metadata.title}
-              date={formatDate(post.metadata.publishedAt, false)}
-              slug={post.slug}
+              eyebrow={formatDate(post.metadata.publishedAt, false)}
+              footer={SITE_HOST}
+              seed={post.slug}
             />
           }
         >

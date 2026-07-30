@@ -18,6 +18,7 @@ export default function CompanyLink({ role, chip = false }: { role: Role; chip?:
       href={role.url}
       previewImage={role.preview}
       imageAlt={`${role.company} preview`}
+      previewTitle={role.company}
       className={chip && role.favicon ? undefined : LINK_CLASS}
     >
       {role.company}

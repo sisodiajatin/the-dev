@@ -21,7 +21,12 @@ const Contact = () => {
         {links.resume && (
           <p>
             or just read my{' '}
-            <HoverLinkPreview href={links.resume} imageAlt="Resume preview" className={LINK_CLASS}>
+            <HoverLinkPreview
+              href={links.resume}
+              imageAlt="Resume preview"
+              previewTitle={`${identity.name} — resume`}
+              className={LINK_CLASS}
+            >
               resume
             </HoverLinkPreview>
             .
@@ -34,6 +39,7 @@ const Contact = () => {
             <HoverLinkPreview
               href={links.booking}
               imageAlt="Booking preview"
+              previewTitle="book a time"
               className={LINK_CLASS}
             >
               book a time

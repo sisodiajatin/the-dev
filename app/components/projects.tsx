@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { formatDate, getProjects } from 'app/projects/utils'
 import BoxedText from './boxed-text'
 import { HoverPreviewLink } from './hover-link-preview'
+import { PreviewCard, PREVIEW_WIDTH, PREVIEW_HEIGHT } from './preview-card'
 
 // 1. Define Props to make the limit optional
 type ProjectsProps = {
@@ -68,29 +69,32 @@ export function Projects({ limit }: ProjectsProps) {
           </>
         )
 
-        if (!project.metadata.image) {
-          return (
-            <Link key={project.slug} className={rowClassName} href={`/projects/${project.slug}`}>
-              {rowContent}
-            </Link>
-          )
-        }
+        // Screenshot when the project has one, generated card otherwise, so
+        // every row gets a hover preview either way.
+        const preview = project.metadata.image ? (
+          <Image
+            src={project.metadata.image}
+            alt={project.metadata.title}
+            width={PREVIEW_WIDTH}
+            height={PREVIEW_HEIGHT}
+            draggable={false}
+            className="w-48 h-28 object-cover rounded-md"
+          />
+        ) : (
+          <PreviewCard
+            title={project.metadata.title}
+            eyebrow={formatDate(project.metadata.publishedAt, false)}
+            footer={techStack[0]}
+            seed={project.slug}
+          />
+        )
 
         return (
           <HoverPreviewLink
             key={project.slug}
             className={rowClassName}
             href={`/projects/${project.slug}`}
-            preview={
-              <Image
-                src={project.metadata.image}
-                alt={project.metadata.title}
-                width={192}
-                height={112}
-                draggable={false}
-                className="w-48 h-28 object-cover rounded-md"
-              />
-            }
+            preview={preview}
           >
             {rowContent}
           </HoverPreviewLink>

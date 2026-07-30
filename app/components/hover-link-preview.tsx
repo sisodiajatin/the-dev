@@ -12,9 +12,28 @@ import {
   useSpring,
 } from "motion/react"
 
-const PREVIEW_WIDTH = 192
-const PREVIEW_HEIGHT = 112
+import { PreviewCard, PREVIEW_WIDTH, PREVIEW_HEIGHT } from "./preview-card"
+import { baseUrl } from "app/lib/profile"
+
 const OFFSET_Y = 40
+
+const SITE_HOST = new URL(baseUrl).host
+
+/**
+ * Turns an href into something worth putting on a generated card, so links
+ * without a screenshot still get a preview instead of nothing.
+ */
+const describeHref = (href: string): { title: string; footer: string } => {
+  if (href.startsWith("mailto:")) return { title: href.slice(7), footer: "email" }
+  if (href.startsWith("/")) return { title: href.replace(/^\//, ""), footer: SITE_HOST }
+  try {
+    const { host, pathname } = new URL(href)
+    const clean = host.replace(/^www\./, "")
+    return { title: clean, footer: pathname === "/" ? "" : pathname }
+  } catch {
+    return { title: href, footer: "" }
+  }
+}
 
 const useCursorPreview = () => {
   const [showPreview, setShowPreview] = useState(false)
@@ -95,6 +114,7 @@ const PreviewPortal = ({
       <AnimatePresence>
         {cursor.showPreview && (
           <motion.div
+            aria-hidden="true"
             initial={{ opacity: 0, scale: 0.8, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
@@ -120,34 +140,31 @@ const PreviewPortal = ({
 
 interface HoverLinkPreviewProps {
   href: string
-  /** Omit to render a plain link with no hover card. */
+  /** A screenshot. Omit and a card is generated from the href instead. */
   previewImage?: string
   imageAlt?: string
+  /** Headline for the generated card. Defaults to the link's hostname. */
+  previewTitle?: string
   className?: string
   children: React.ReactNode
 }
 
-// External link (new tab) with a static image preview card.
+// External link (new tab) with a hover preview card.
 const HoverLinkPreview = ({
   href,
   previewImage,
   imageAlt = "Link preview",
+  previewTitle,
   className,
   children,
 }: HoverLinkPreviewProps) => {
   const cursor = useCursorPreview()
 
-  // No screenshot on file yet — degrade to an ordinary link rather than
-  // showing an empty card.
-  if (!previewImage) {
-    return (
-      <a href={href} target="_blank" rel="noopener" className={className}>
-        {children}
-      </a>
-    )
-  }
+  const described = describeHref(href)
 
-  const previewImg = (
+  // A screenshot when one exists, otherwise a generated card — every link
+  // gets a preview, with or without image assets on disk.
+  const preview = previewImage ? (
     <Image
       src={previewImage}
       alt={imageAlt}
@@ -156,22 +173,26 @@ const HoverLinkPreview = ({
       draggable={false}
       className="w-48 h-28 object-cover rounded-md"
     />
+  ) : (
+    <PreviewCard title={previewTitle ?? described.title} footer={described.footer} seed={href} />
   )
+
+  const isInternal = href.startsWith("/")
 
   return (
     <>
       <a
         href={href}
-        target="_blank"
-        rel="noopener"
+        {...(isInternal ? {} : { target: "_blank", rel: "noopener" })}
         className={className}
         {...cursor.handlers}
       >
         {children}
       </a>
 
-      <PreviewPortal cursor={cursor} preload={previewImg}>
-        {previewImg}
+      {/* Only images need preloading; generated cards are inline SVG. */}
+      <PreviewPortal cursor={cursor} preload={previewImage ? preview : undefined}>
+        {preview}
       </PreviewPortal>
     </>
   )

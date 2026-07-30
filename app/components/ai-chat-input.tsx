@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState, useEffect, useRef } from "react"
-import { Lightbulb, Mic, Globe, Paperclip, Send } from "lucide-react"
+import { Send } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
 import { identity } from "app/lib/profile"
 
@@ -26,8 +26,6 @@ const AIChatInput = ({ onActiveChange, onSendMessage, isLoading = false }: AICha
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [showPlaceholder, setShowPlaceholder] = useState(true)
   const [isActive, setIsActive] = useState(false)
-  const [thinkActive, setThinkActive] = useState(false)
-  const [deepSearchActive, setDeepSearchActive] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -143,15 +141,6 @@ const AIChatInput = ({ onActiveChange, onSendMessage, isLoading = false }: AICha
       <div className="flex flex-col-reverse items-stretch w-full h-full">
         {/* Input Row */}
         <div className="flex items-center gap-2 p-3 rounded-lg w-full">
-          <button
-            className="p-3 rounded-lg hover:bg-secondary transition"
-            title="Attach file"
-            type="button"
-            tabIndex={-1}
-          >
-            <Paperclip size={20} />
-          </button>
-
           {/* Text Input & Placeholder */}
           <div className="relative flex-1">
             <input
@@ -198,102 +187,16 @@ const AIChatInput = ({ onActiveChange, onSendMessage, isLoading = false }: AICha
           </div>
 
           <button
-            className="p-3 rounded-lg hover:bg-secondary transition"
-            title="Voice input"
-            type="button"
-            tabIndex={-1}
-          >
-            <Mic size={20} />
-          </button>
-          <button
             className="flex items-center gap-1 bg-foreground text-background hover:bg-foreground/90 p-3 rounded-lg font-medium justify-center transition disabled:opacity-50"
             title="Send"
+            aria-label="Send message"
             type="button"
-            tabIndex={-1}
             onClick={handleSubmit}
             disabled={isLoading || !inputValue.trim()}
           >
             <Send size={18} />
           </button>
         </div>
-
-        {/* Expanded Controls */}
-        <motion.div
-          className="w-full flex justify-start px-4 items-center text-sm"
-          variants={{
-            hidden: {
-              opacity: 0,
-              y: -10,
-              pointerEvents: "none",
-              transition: { duration: 0.25 },
-            },
-            visible: {
-              opacity: 1,
-              y: 0,
-              pointerEvents: "auto",
-              transition: { duration: 0.35, delay: 0.08 },
-            },
-          }}
-          initial="hidden"
-          animate={isActive || inputValue ? "visible" : "hidden"}
-          style={{ marginBottom: 8 }}
-        >
-          <div className="flex gap-4 mt-2 items-center">
-            {/* Think Toggle */}
-            <button
-              className={`flex items-center gap-1 px-4 py-2 rounded-lg transition-all font-medium group ${
-                thinkActive
-                  ? "bg-accent outline outline-accent-foreground/20 text-accent-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-muted"
-              }`}
-              title="Think"
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                setThinkActive((a) => !a)
-              }}
-            >
-              <Lightbulb
-                className="group-hover:fill-yellow-300 transition-all"
-                size={18}
-              />
-              Think
-            </button>
-
-            {/* Deep Search Toggle */}
-            <motion.button
-              className={`flex items-center px-4 gap-1 py-2 rounded-lg transition font-medium whitespace-nowrap overflow-hidden justify-start ${
-                deepSearchActive
-                  ? "bg-accent outline outline-accent-foreground/20 text-accent-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-muted"
-              }`}
-              title="Deep Search"
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                setDeepSearchActive((a) => !a)
-              }}
-              initial={false}
-              animate={{
-                width: deepSearchActive ? 125 : 36,
-                paddingLeft: deepSearchActive ? 8 : 9,
-              }}
-            >
-              <div className="flex-1">
-                <Globe size={18} />
-              </div>
-              <motion.span
-                className="pb-[2px]"
-                initial={false}
-                animate={{
-                  opacity: deepSearchActive ? 1 : 0,
-                }}
-              >
-                Deep Search
-              </motion.span>
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </motion.div>
   )
