@@ -19,8 +19,7 @@ function bullets(items: readonly string[]): string {
 }
 
 /**
- * The single body of knowledge the on-site assistant is given, also served
- * verbatim at /llms.txt.
+ * The machine-readable summary served verbatim at /llms.txt.
  *
  * Empty sections are omitted rather than emitted blank — a heading with
  * nothing under it invites the model to invent filler.
@@ -59,8 +58,8 @@ export async function getLLMContext(): Promise<string> {
   const blogLines = blogs
     .map((b) => {
       const url = b.metadata.externalUrl ?? `${baseUrl}/blog/${b.slug}`
-      // Tell the assistant where a piece actually lives, so it can say
-      // "published on dev.to" rather than implying it is hosted here.
+      // Say where a piece actually lives, so a reader of this file doesn't
+      // assume it is hosted on this domain.
       let where = ''
       if (b.metadata.externalUrl) {
         try {

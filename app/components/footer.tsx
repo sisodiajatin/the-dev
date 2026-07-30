@@ -8,7 +8,7 @@ import {
   SiYoutube,
   SiGooglescholar,
 } from 'react-icons/si'
-import { activeLinks, identity, links, repoUrl, type LinkKey } from 'app/lib/profile'
+import { activeLinks, identity, linkLabels, links, repoUrl, type LinkKey } from 'app/lib/profile'
 
 function RssIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -49,7 +49,7 @@ export default function Footer() {
               rel="noopener"
               target="_blank"
               href={link.url}
-              aria-label={link.name}
+              aria-label={linkLabels[link.name]}
             >
               <link.Icon aria-hidden="true" focusable="false" />
             </a>

@@ -1,17 +1,15 @@
 # Personal site
 
-Portfolio, blog, and project index. Next.js App Router, MDX content, and an
-on-site AI assistant that answers questions about you using only the facts you
-publish.
+Portfolio, blog, and project index. Next.js App Router with MDX content.
 
 ## Start here
 
 Everything personal lives in one file: **[`app/lib/profile.ts`](app/lib/profile.ts)**.
 
 Your name, role, location, links, employment history, bio, SEO copy and the
-knowledge given to the AI assistant are all defined there. No component hardcodes
-a personal detail — change a value once and it propagates to the homepage,
-metadata, OG images, RSS, JSON-LD, `/llms.txt` and the chat.
+machine-readable dossier at `/llms.txt` are all defined there. No component
+hardcodes a personal detail — change a value once and it propagates to the
+homepage, metadata, OG images, RSS and JSON-LD.
 
 Search that file for `TODO` to find every placeholder that still needs your data.
 
@@ -27,9 +25,8 @@ npm run dev
 
 Then open <http://localhost:3000>.
 
-The AI chat needs a Google Generative AI key to respond; everything else works
-without any environment variables. Copy `.env.example` to `.env` and fill in what
-you need.
+No environment variables are required. Copy `.env.example` to `.env` if you want
+Google Analytics.
 
 ## Adding content
 
@@ -48,8 +45,7 @@ directory document the details — delete them once you have real content.
 - **Framework** — Next.js 16 (App Router, Turbopack)
 - **Styling** — Tailwind CSS v4
 - **Content** — MDX via `next-mdx-remote`, GitHub-flavoured markdown
-- **AI chat** — Vercel AI SDK + Google Gemini, rate-limited with Upstash Redis
-- **SEO** — sitemap, robots, RSS, JSON-LD, on-demand OG images
+- **SEO** — sitemap, robots, RSS, JSON-LD, on-demand OG images, `/llms.txt`
 - **Analytics** — Vercel Analytics + Speed Insights, optional Google Analytics
 
 ## Deploying

@@ -38,7 +38,7 @@ externalUrl: 'https://dev.to/sisodiajatin/some-slug'
 ```
 
 The listing shows the host next to the title (`dev.to ↗`), the RSS item points
-at the original, and the site's AI assistant is told where it was published. The
+at the original, and /llms.txt notes where it was published. The
 body of the file is never rendered, so keep it to a note about where it lives.
 
 ## What you can write

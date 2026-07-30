@@ -4,7 +4,7 @@
 //  It is the single source of truth for every personal detail on this site.
 //  No other file hardcodes a name, a link, a job, or a bio — they all read
 //  from here. Change a value once and it updates the homepage, the metadata,
-//  the OG images, the RSS feed, the JSON-LD, /llms.txt and the AI chat.
+//  the OG images, the RSS feed, the JSON-LD and /llms.txt.
 //
 //  Populated from SWE_Resume_Jatin.pdf. Anything still marked TODO is either
 //  not on the resume or is a judgement call left to you.
@@ -52,7 +52,7 @@ export const identity = {
 // ── Links ────────────────────────────────────────────────────────────────────
 //
 // Every entry is optional. Set one to undefined and it vanishes from the
-// footer, the contact block and the AI chat buttons.
+// footer and the contact block.
 
 export const links: Partial<Record<LinkKey, string>> = {
   github: 'https://github.com/sisodiajatin',
@@ -78,7 +78,7 @@ export type LinkKey =
   | 'resume'
   | 'booking'
 
-/** Human labels for each link, used by the footer and the AI chat buttons. */
+/** Accessible names for each link, used by the footer icons. */
 export const linkLabels: Record<LinkKey, string> = {
   github: 'Open GitHub',
   linkedin: 'Open LinkedIn',
@@ -189,15 +189,14 @@ export const projectsMeta = {
   description: `Things ${identity.name} has built — AI tooling, real-time systems, and search infrastructure.`,
 } as const
 
-// ── Long-form context for /llms.txt and the AI chat ──────────────────────────
+// ── Long-form context for /llms.txt ───────────────────────────────────────
 //
-// This is what the on-site AI assistant is allowed to know about you, and what
-// gets served at /llms.txt. Every section is optional — leave a list empty and
-// its heading is skipped entirely, so the assistant never sees a blank section
-// it might try to fill in.
+// Served verbatim at /llms.txt: a machine-readable summary of you for search
+// engines, AI crawlers and anything else that wants the facts without scraping
+// the HTML. Every section is optional — leave a list empty and its heading is
+// skipped entirely rather than emitted blank.
 //
-// IMPORTANT: only put true things here. The assistant treats this as its single
-// source of truth and will repeat it verbatim to visitors.
+// IMPORTANT: only put true things here. It is published as-is.
 
 export const dossier = {
   summary:
