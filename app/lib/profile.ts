@@ -6,73 +6,63 @@
 //  from here. Change a value once and it updates the homepage, the metadata,
 //  the OG images, the RSS feed, the JSON-LD, /llms.txt and the AI chat.
 //
-//  Anything marked TODO is a placeholder that still needs your real data.
-//  Leave a field as `undefined` (or drop it from a list) and the UI will
-//  simply not render it — nothing breaks.
+//  Populated from SWE_Resume_Jatin.pdf. Anything still marked TODO is either
+//  not on the resume or is a judgement call left to you.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Production origin, no trailing slash. Used for canonical URLs everywhere. */
-// TODO: point this at your real domain before deploying.
-export const baseUrl = 'https://example.com'
+export const baseUrl = 'https://jatin-sisodia.dev'
 
 /** Where this site's source lives. Shown in the footer. */
-// TODO: your repo.
-export const repoUrl = 'https://github.com/sisodiajatin'
+// TODO: point at this repo once you've pushed it.
+export const repoUrl = 'https://github.com/jatin-sisodia'
 
 // ── Identity ─────────────────────────────────────────────────────────────────
 
 export const identity = {
-  /** Full name, as you want it to appear in metadata and JSON-LD. */
-  // NOTE: inferred from your git config (`sisodiajatin` / sisodia1999@gmail.com).
-  // TODO: correct this if the spelling or order is wrong.
   name: 'Jatin Sisodia',
 
   /**
-   * Optional second rendering of your name — the original template showed the
-   * owner's name in Devanagari next to the Latin one. Set to `undefined` to
-   * hide it.
+   * Optional second rendering of your name in another script — the original
+   * template showed one in Devanagari. Set to undefined to hide it.
    */
-  // TODO: set your own, or leave undefined.
   nativeName: undefined as string | undefined,
 
-  /** Handle used across socials, without the @. Set to undefined if you don't use one. */
-  // TODO
+  /** Handle used across socials, without the @. Undefined hides all @-mentions. */
+  // TODO: set this if you use a consistent handle (it drives the Twitter card
+  // attribution and the OG image byline).
   handle: undefined as string | undefined,
 
   /** One-line role. Appears in metadata, OG images and JSON-LD. */
-  // TODO
   role: 'Software Engineer',
 
-  email: 'sisodia1999@gmail.com',
+  // NOTE: this is the address on your resume. Your git config uses
+  // sisodia1999@gmail.com — switch it back if that's the one you want public.
+  email: 'jatinsisodiausa@gmail.com',
 
   location: {
-    /** Optional native-script rendering of your city. */
     native: undefined as string | undefined,
-    // TODO
-    english: 'India',
+    english: 'Worcester, MA',
   },
 
   /** Small chips under your name on the homepage. Keep them short. */
-  // TODO
-  tags: ['engineering', 'web', 'ai'],
+  tags: ['backend', 'full-stack', 'apis', 'cloud'],
 } as const
 
 // ── Links ────────────────────────────────────────────────────────────────────
 //
-// Every entry is optional. Delete or set to undefined the ones you don't use
-// and they vanish from the footer, the contact block and the AI chat buttons.
+// Every entry is optional. Set one to undefined and it vanishes from the
+// footer, the contact block and the AI chat buttons.
 
 export const links: Partial<Record<LinkKey, string>> = {
-  // TODO: replace with your own profiles; delete the rest.
-  github: 'https://github.com/sisodiajatin',
-  linkedin: undefined,
+  github: 'https://github.com/jatin-sisodia',
+  linkedin: 'https://linkedin.com/in/jatin-sisodia',
   x: undefined,
   instagram: undefined,
   youtube: undefined,
   scholar: undefined,
-  /** Path or URL to a resume PDF. Drop a file at public/resume.pdf to enable. */
-  resume: undefined,
-  /** Cal.com / Calendly / etc. */
+  resume: '/resume.pdf',
+  // TODO: add a Cal.com / Calendly link if you want visitors to book time.
   booking: undefined,
 }
 
@@ -122,37 +112,42 @@ export type Role = {
 }
 
 export const homepage = {
-  /** Short line under your name. Rendered with "build" and "fast" emphasised. */
-  // TODO
-  tagline: 'i build things for the web',
-
-  /** Your current position. Set to `undefined` to hide the whole section. */
-  // TODO
-  current: {
-    company: 'TODO: current employer',
-    url: undefined,
-    title: 'TODO: your title',
-  } as Role | undefined,
+  /** Short line under your name. */
+  tagline: 'i build apis, platforms, and real-time systems',
 
   /**
-   * Free-text paragraphs after the current role. Each string is one <p>.
-   * This is the main "about me" on the homepage.
+   * Your current position. Left undefined — your resume shows the MS at WPI
+   * finishing May 2026 with no overlapping role.
    */
-  // TODO: write these in your own voice.
+  // TODO: fill this in when you start somewhere, then the "Current" heading
+  // reappears automatically.
+  current: undefined as Role | undefined,
+
+  /** Free-text paragraphs. Each string is one <p>. The main "about me". */
   about: [
-    'TODO: a sentence or two about what you work on and what you care about.',
-    'TODO: something human — hobbies, interests, what you read.',
+    'software engineer with an ms in computer science from worcester polytechnic institute, and production experience building rest apis, full-stack platforms, and real-time systems in c#/asp.net, python, node.js, and react.',
+    // TODO: replace with what you're actually doing right now — job hunting,
+    // contracting, building something. This is the first thing a recruiter reads.
+    'TODO: one line on what you are working on at the moment.',
   ] as readonly string[],
 
-  /** Past positions, newest first. Empty array hides the section. */
-  // TODO
-  previous: [] as Role[],
+  /** Past positions, newest first. */
+  previous: [
+    {
+      company: 'WebCraft-IT',
+      title: 'software developer',
+      // TODO: add `url` and a `/previews/*.webp` screenshot to get the hover card.
+    },
+    {
+      company: 'Travel Junction Indo',
+      title: 'web developer',
+    },
+  ] as Role[],
 
   /** Heading + copy for the contact block. */
   contact: {
     heading: 'Contact',
-    // TODO
-    blurb: 'for work, collaborations, or anything else, reach me at',
+    blurb: 'for roles, contract work, or anything else, reach me at',
   },
 } as const
 
@@ -163,26 +158,33 @@ const displayHandle = identity.handle ? ` (@${identity.handle})` : ''
 export const seo = {
   titleDefault: `${identity.name}${displayHandle} | ${identity.role}`,
   titleTemplate: `%s | ${identity.name}`,
-  // TODO: write a real 150-160 character description; this one is generic.
-  description: `${identity.name} — ${identity.role} based in ${identity.location.english}. Projects, writing, and things I've built.`,
-  /** Keywords are a weak signal but harmless. Keep them honest. */
-  // TODO
-  keywords: [identity.name, identity.role, identity.location.english].filter(Boolean),
+  description:
+    'Jatin Sisodia — Software Engineer in Worcester, MA. MS in Computer Science from WPI. ' +
+    'Builds REST APIs, full-stack platforms, and real-time systems with C#/ASP.NET, Python, Node.js, and React.',
+  keywords: [
+    'Jatin Sisodia',
+    'Software Engineer',
+    'Worcester MA',
+    'C#',
+    'ASP.NET',
+    'Python',
+    'Node.js',
+    'React',
+    'REST API',
+    'WPI',
+  ],
   siteName: identity.name,
-  /** Twitter card attribution. Only used if `handle` is set. */
   twitterHandle: identity.handle ? `@${identity.handle}` : undefined,
 } as const
 
 export const blogMeta = {
-  // TODO
   title: `Writing — ${identity.name}`,
-  description: `Notes, tutorials and build logs by ${identity.name}.`,
+  description: `Notes and build logs by ${identity.name}, software engineer.`,
 } as const
 
 export const projectsMeta = {
-  // TODO
   title: `Projects — ${identity.name}`,
-  description: `Things ${identity.name} has built.`,
+  description: `Things ${identity.name} has built — AI tooling, real-time systems, and search infrastructure.`,
 } as const
 
 // ── Long-form context for /llms.txt and the AI chat ──────────────────────────
@@ -192,31 +194,40 @@ export const projectsMeta = {
 // its heading is skipped entirely, so the assistant never sees a blank section
 // it might try to fill in.
 //
-// IMPORTANT: only put true things here. The assistant is instructed to treat
-// this as its single source of truth and will repeat it verbatim to visitors.
+// IMPORTANT: only put true things here. The assistant treats this as its single
+// source of truth and will repeat it verbatim to visitors.
 
 export const dossier = {
-  /** One-paragraph summary. Shown at the top of /llms.txt. */
-  // TODO
-  summary: `TODO: one paragraph introducing yourself — what you do, where, and what you're known for.`,
+  summary:
+    'Software Engineer with an MS in Computer Science from Worcester Polytechnic Institute and production ' +
+    'experience building REST APIs, full-stack platforms, and real-time systems using C#/ASP.NET, Python, ' +
+    'Node.js, and React. Based in Worcester, Massachusetts.',
 
-  /** Newest first. Format: 'Company (Location) — Title, Start–End. What you did.' */
-  // TODO
-  experience: [] as string[],
+  experience: [
+    'WebCraft-IT — Software Developer, Aug 2023–Jun 2024. Built 10+ modules of a commodity trading platform ' +
+      'across the full SDLC in C#, ASP.NET and PHP, supporting 5,000+ daily transactions. Designed the SQL Server ' +
+      'schema and built 15+ REST APIs hosted on AWS EC2 to automate data integration across platform modules.',
+    'Travel Junction Indo — Web Developer, Apr 2023. Launched a WordPress site with custom theme development and ' +
+      'payment gateway integration, digitising the booking workflow. Improved mobile responsiveness, page load ' +
+      'time and on-page SEO.',
+  ] as string[],
 
-  /** Format: 'Institution — Degree (Years). Any distinction.' */
-  // TODO
-  education: [] as string[],
+  education: [
+    'Worcester Polytechnic Institute (Worcester, MA) — MS, Computer Science, Aug 2024–May 2026. GPA 3.5/4.0.',
+    'Medicaps University (Indore, India) — B.Tech, Computer Science, Aug 2019–May 2023. GPA 3.2/4.0.',
+  ] as string[],
 
-  /** Grouped skills. Delete groups you don't need. */
-  // TODO
-  skills: {} as Record<string, string[]>,
+  skills: {
+    Languages: ['C#', 'Java', 'Python', 'JavaScript', 'TypeScript', 'SQL', 'C/C++'],
+    Frontend: ['React.js', 'Angular', 'Vue.js', 'D3.js', 'Chart.js', 'Tailwind CSS', 'Framer Motion'],
+    Backend: ['ASP.NET', 'Node.js', 'Express.js', 'Flask', 'FastAPI', 'Spring Boot'],
+    Databases: ['SQL Server', 'MySQL', 'MongoDB', 'SQLite', 'Elasticsearch'],
+    'Cloud & DevOps': ['Docker', 'Kubernetes', 'AWS EC2', 'Azure Functions', 'CI/CD', 'Git'],
+  } as Record<string, string[]>,
 
-  /** Papers, talks, patents. Leave empty if not applicable. */
-  // TODO
+  /** Papers, talks, patents. Nothing on the resume. */
   publications: [] as string[],
 
-  /** Clubs, chapters, volunteering. Leave empty if not applicable. */
-  // TODO
+  /** Clubs, chapters, volunteering. Nothing on the resume. */
   leadership: [] as string[],
 } as const

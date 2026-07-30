@@ -9,7 +9,8 @@ const Current = () => {
   return (
     <section>
       <div className="flex flex-col gap-figma-inside-gap">
-        <h2 className="font-semibold italic">Current</h2>
+        {/* "Current" only makes sense when there is a role under it. */}
+        <h2 className="font-semibold italic">{current ? 'Current' : 'About'}</h2>
 
         {current && (
           <p>

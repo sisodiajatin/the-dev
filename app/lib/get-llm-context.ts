@@ -34,7 +34,13 @@ export async function getLLMContext(): Promise<string> {
     `- Email: ${identity.email}`,
     ...(Object.keys(links) as (keyof typeof links)[])
       .filter((key) => links[key])
-      .map((key) => `- ${key[0].toUpperCase()}${key.slice(1)}: ${links[key]}`),
+      // Site-relative links (e.g. /resume.pdf) are useless to an LLM reading
+      // this file out of band — make every URL absolute.
+      .map((key) => {
+        const url = links[key] as string
+        const absolute = url.startsWith('/') ? `${baseUrl}${url}` : url
+        return `- ${key[0].toUpperCase()}${key.slice(1)}: ${absolute}`
+      }),
   ].join('\n')
 
   const skillLines = Object.entries(dossier.skills)

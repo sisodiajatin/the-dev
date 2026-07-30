@@ -1,0 +1,26 @@
+---
+title: 'Argus — AI Code Review Assistant'
+publishedAt: '2026-05-01'
+summary: 'An AI code reviewer that runs as a CLI, a GitHub webhook, and a GitHub Action, posting inline review comments on pull requests automatically.'
+tech: 'Python, FastAPI, React, Docker, GitHub Actions, LLMs'
+---
+
+An AI-powered code reviewer deployed across three surfaces — a CLI tool, a GitHub
+webhook, and a GitHub Action — integrating OpenAI-compatible LLMs (Groq among them)
+to analyse pull request diffs and post inline review comments automatically.
+
+## What it does
+
+Auto-update logic re-triggers LLM analysis on every re-push and sets GitHub commit
+status checks for merge gating, so code quality is enforced without a human
+reviewer having to be in the loop.
+
+A FastAPI + React dashboard sits on top with PR analytics and re-review controls.
+The whole thing deploys with one command across Docker, Railway and Render, and the
+package is published to PyPI.
+
+## Links
+
+- [Source on GitHub](https://github.com/jatin-sisodia/argus)
+
+{/* TODO: add the live demo URL, and set `publishedAt` above to the real date. */}

@@ -99,6 +99,15 @@ html {
   @apply px-1 py-0.5 rounded-lg;
 }
 
+/* <body> is CSS-lowercased for the site's aesthetic, and that inherits into
+   code. Case matters in code, so opt these back out. */
+.prose pre,
+.prose code,
+.prose kbd,
+.prose samp {
+  text-transform: none;
+}
+
 .prose pre code {
   @apply p-0;
   border: initial;
