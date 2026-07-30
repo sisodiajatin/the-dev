@@ -57,11 +57,23 @@ export async function getLLMContext(): Promise<string> {
     .join('\n')
 
   const blogLines = blogs
-    .map(
-      (b) =>
-        `- ${truncate(b.metadata.title, 60)} (${b.metadata.publishedAt}): ` +
-        `${truncate(b.metadata.summary, 150)} [URL: ${baseUrl}/blog/${b.slug}]`
-    )
+    .map((b) => {
+      const url = b.metadata.externalUrl ?? `${baseUrl}/blog/${b.slug}`
+      // Tell the assistant where a piece actually lives, so it can say
+      // "published on dev.to" rather than implying it is hosted here.
+      let where = ''
+      if (b.metadata.externalUrl) {
+        try {
+          where = ` (published on ${new URL(b.metadata.externalUrl).host.replace(/^www\./, '')})`
+        } catch {
+          where = ' (published elsewhere)'
+        }
+      }
+      return (
+        `- ${truncate(b.metadata.title, 60)} (${b.metadata.publishedAt.slice(0, 10)})${where}: ` +
+        `${truncate(b.metadata.summary, 150)} [URL: ${url}]`
+      )
+    })
     .join('\n')
 
   const currentRole = homepage.current

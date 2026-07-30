@@ -3,17 +3,22 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { localOnly } from 'app/lib/mdx-content'
 import { baseUrl, identity, sameAs } from 'app/lib/profile'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
+// Posts published elsewhere are listed but never given a page here, so they
+// must not appear in the route table or the lookup below.
+const localPosts = () => localOnly(getBlogPosts())
+
 export async function generateStaticParams() {
-  return getBlogPosts().map((post) => ({ slug: post.slug }))
+  return localPosts().map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata | undefined> {
   const { slug } = await params
-  const post = getBlogPosts().find((p) => p.slug === slug)
+  const post = localPosts().find((p) => p.slug === slug)
   if (!post) return
 
   const {
@@ -50,7 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata 
 
 export default async function Blog({ params }: PageProps) {
   const { slug } = await params
-  const post = getBlogPosts().find((p) => p.slug === slug)
+  const post = localPosts().find((p) => p.slug === slug)
 
   if (!post) notFound()
 

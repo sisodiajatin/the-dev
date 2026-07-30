@@ -14,8 +14,8 @@
 export const baseUrl = 'https://jatin-sisodia.dev'
 
 /** Where this site's source lives. Shown in the footer. */
-// TODO: point at this repo once you've pushed it.
-export const repoUrl = 'https://github.com/jatin-sisodia'
+// TODO: point at this repo specifically once you've pushed it.
+export const repoUrl = 'https://github.com/sisodiajatin'
 
 // ── Identity ─────────────────────────────────────────────────────────────────
 
@@ -55,7 +55,9 @@ export const identity = {
 // footer, the contact block and the AI chat buttons.
 
 export const links: Partial<Record<LinkKey, string>> = {
-  github: 'https://github.com/jatin-sisodia',
+  github: 'https://github.com/sisodiajatin',
+  // NOTE: unverified. Your resume links here, but the GitHub URL next to it
+  // pointed at an account that isn't yours — worth double-checking this one too.
   linkedin: 'https://linkedin.com/in/jatin-sisodia',
   x: undefined,
   instagram: undefined,

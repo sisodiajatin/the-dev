@@ -8,12 +8,28 @@ export type ContentMetadata = {
   image?: string
   /** Comma-separated tech list; projects only. */
   tech?: string
+  /**
+   * Set when the piece lives somewhere else (dev.to, a company blog). The
+   * entry still appears in listings and the RSS feed, but no page is built
+   * for it and the link goes straight to the original.
+   */
+  externalUrl?: string
 }
 
 export type ContentEntry = {
   metadata: ContentMetadata
   slug: string
   content: string
+}
+
+/** The canonical URL for an entry — its own page, or wherever it actually lives. */
+export function contentUrl(entry: ContentEntry, section: 'blog' | 'projects', origin = ''): string {
+  return entry.metadata.externalUrl ?? `${origin}/${section}/${entry.slug}`
+}
+
+/** Entries that have a page on this site (i.e. everything not hosted elsewhere). */
+export function localOnly(entries: ContentEntry[]): ContentEntry[] {
+  return entries.filter((e) => !e.metadata.externalUrl)
 }
 
 // Anchored to the start of the file so a `---` divider inside the body can

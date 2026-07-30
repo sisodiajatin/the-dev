@@ -201,14 +201,18 @@ const HoverLinkPreview = ({
 interface HoverPreviewLinkProps {
   href: string
   preview: React.ReactNode
+  /** Opens in a new tab via a plain anchor instead of client-side navigation. */
+  external?: boolean
   className?: string
   children: React.ReactNode
 }
 
-// Internal navigation (Next Link, same tab) with an arbitrary preview node.
+// Navigation with an arbitrary preview node — a Next Link by default, a plain
+// anchor when the destination is off-site.
 const HoverPreviewLink = ({
   href,
   preview,
+  external = false,
   className,
   children,
 }: HoverPreviewLinkProps) => {
@@ -216,9 +220,21 @@ const HoverPreviewLink = ({
 
   return (
     <>
-      <Link href={href} className={className} {...cursor.handlers}>
-        {children}
-      </Link>
+      {external ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener"
+          className={className}
+          {...cursor.handlers}
+        >
+          {children}
+        </a>
+      ) : (
+        <Link href={href} className={className} {...cursor.handlers}>
+          {children}
+        </Link>
+      )}
 
       <PreviewPortal cursor={cursor}>{preview}</PreviewPortal>
     </>

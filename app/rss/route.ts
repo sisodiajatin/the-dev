@@ -22,7 +22,8 @@ export async function GET() {
 
   const itemsXml = allBlogs
     .map((post) => {
-      const url = `${baseUrl}/blog/${post.slug}`
+      // Externally-hosted pieces point at the original, not a page we don't have.
+      const url = post.metadata.externalUrl ?? `${baseUrl}/blog/${post.slug}`
       return `<item>
           <title>${escapeXml(post.metadata.title)}</title>
           <link>${url}</link>

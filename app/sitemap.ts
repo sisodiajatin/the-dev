@@ -1,5 +1,6 @@
 import { getBlogPosts } from 'app/blog/utils'
 import { getProjects } from 'app/projects/utils'
+import { localOnly } from 'app/lib/mdx-content'
 import { baseUrl } from 'app/lib/profile'
 
 // Re-exported for the modules that historically imported baseUrl from here.
@@ -7,12 +8,14 @@ import { baseUrl } from 'app/lib/profile'
 export { baseUrl }
 
 export default async function sitemap() {
-  const blogs = getBlogPosts().map((post) => ({
+  // Only pages that exist on this domain — writing hosted elsewhere has no
+  // URL here to submit.
+  const blogs = localOnly(getBlogPosts()).map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }))
 
-  const projects = getProjects().map((project) => ({
+  const projects = localOnly(getProjects()).map((project) => ({
     url: `${baseUrl}/projects/${project.slug}`,
     lastModified: project.metadata.publishedAt,
   }))
