@@ -28,6 +28,13 @@ Then open <http://localhost:3000>.
 No environment variables are required. Copy `.env.example` to `.env` if you want
 Google Analytics.
 
+> **Don't delete `.next/` while `npm run dev` is running.** Turbopack keeps a
+> persistent cache database in there; pulling it out from under a live dev
+> server corrupts it, and the server keeps running while serving nothing but
+> `Internal Server Error`. Stop the dev server first, then `rm -rf .next`, then
+> start it again. Same applies to running `npm run build` alongside `npm run
+> dev` — they share `.next/`.
+
 ## Adding content
 
 | What | Where |
