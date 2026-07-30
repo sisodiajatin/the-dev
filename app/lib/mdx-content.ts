@@ -22,11 +22,6 @@ export type ContentEntry = {
   content: string
 }
 
-/** The canonical URL for an entry — its own page, or wherever it actually lives. */
-export function contentUrl(entry: ContentEntry, section: 'blog' | 'projects', origin = ''): string {
-  return entry.metadata.externalUrl ?? `${origin}/${section}/${entry.slug}`
-}
-
 /** Entries that have a page on this site (i.e. everything not hosted elsewhere). */
 export function localOnly(entries: ContentEntry[]): ContentEntry[] {
   return entries.filter((e) => !e.metadata.externalUrl)

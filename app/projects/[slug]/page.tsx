@@ -4,18 +4,23 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getProjects } from 'app/projects/utils'
+import { localOnly } from 'app/lib/mdx-content'
 import { baseUrl, identity } from 'app/lib/profile'
 import BoxedText from 'app/components/boxed-text'
 
 type PageProps = { params: Promise<{ slug: string }> }
 
+// Mirrors the blog: an entry with `externalUrl` is listed but never given a
+// page here, so it must stay out of the route table and the lookup.
+const localProjects = () => localOnly(getProjects())
+
 export async function generateStaticParams() {
-  return getProjects().map((project) => ({ slug: project.slug }))
+  return localProjects().map((project) => ({ slug: project.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata | undefined> {
   const { slug } = await params
-  const post = getProjects().find((p) => p.slug === slug)
+  const post = localProjects().find((p) => p.slug === slug)
   if (!post) return
 
   const { title, publishedAt, summary, image } = post.metadata
@@ -46,7 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata 
 
 export default async function Project({ params }: PageProps) {
   const { slug } = await params
-  const post = getProjects().find((p) => p.slug === slug)
+  const post = localProjects().find((p) => p.slug === slug)
 
   if (!post) notFound()
 

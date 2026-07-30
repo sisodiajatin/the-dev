@@ -13,13 +13,11 @@ type ProjectsProps = {
 export function Projects({ limit }: ProjectsProps) {
   let allProjects = getProjects()
 
-  // Sort projects by date
-  let sortedProjects = [...allProjects].sort((a, b) => {
-    if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-      return -1
-    }
-    return 1
-  })
+  // Sort projects by date, newest first
+  let sortedProjects = [...allProjects].sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+  )
 
   // 2. Slice the array if a limit is provided
   let displayedProjects = limit ? sortedProjects.slice(0, limit) : sortedProjects
@@ -89,11 +87,16 @@ export function Projects({ limit }: ProjectsProps) {
           />
         )
 
+        // A project hosted elsewhere has no page here — link straight to it,
+        // the same way externally-published writing works.
+        const externalUrl = project.metadata.externalUrl
+
         return (
           <HoverPreviewLink
             key={project.slug}
             className={rowClassName}
-            href={`/projects/${project.slug}`}
+            href={externalUrl ?? `/projects/${project.slug}`}
+            external={Boolean(externalUrl)}
             preview={preview}
           >
             {rowContent}
