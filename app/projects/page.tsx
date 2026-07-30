@@ -1,8 +1,11 @@
+import type { Metadata } from 'next'
 import { Projects } from 'app/components/projects'
+import { baseUrl, projectsMeta } from 'app/lib/profile'
 
-export const metadata = {
-  title: 'Projects — Things sagar_builds Has Built',
-  description: 'Explore projects built by Sagar Tamang (@sagar_builds) — AI tools, web apps, research prototypes, and open-source contributions.',
+export const metadata: Metadata = {
+  title: projectsMeta.title,
+  description: projectsMeta.description,
+  alternates: { canonical: `${baseUrl}/projects` },
 }
 
 export default function Page() {

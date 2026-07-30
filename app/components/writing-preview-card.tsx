@@ -1,8 +1,12 @@
+import { baseUrl } from 'app/lib/profile'
+
 // Must match the card dimensions in hover-link-preview.tsx (w-48 h-28).
 // Not imported from there: that module is "use client", and pulling plain
 // values across the RSC boundary breaks the server build.
 const PREVIEW_WIDTH = 192
 const PREVIEW_HEIGHT = 112
+
+const SITE_HOST = new URL(baseUrl).host
 
 // Deterministic hash so server render and client hydration always agree.
 const hashString = (s: string) => {
@@ -100,7 +104,7 @@ const WritingPreviewCard = ({ title, date, slug }: WritingPreviewCardProps) => {
       ))}
 
       <text x={PREVIEW_WIDTH - 12} y={PREVIEW_HEIGHT - 10} textAnchor="end" fontSize="8" fill="rgba(255,255,255,0.45)">
-        sagartamang.com
+        {SITE_HOST}
       </text>
     </svg>
   )

@@ -1,0 +1,62 @@
+---
+title: 'Hello world'
+publishedAt: '2026-07-29'
+summary: 'The first post — and a reference for every bit of formatting this blog supports.'
+---
+
+This is a placeholder post. Delete it once you have something real to say, or keep
+it around as a formatting reference.
+
+## Writing a new post
+
+Drop a `.mdx` file in `app/blog/posts/`. The filename becomes the URL slug, so
+`app/blog/posts/hello-world.mdx` is served at `/blog/hello-world`.
+
+Every post needs frontmatter at the very top:
+
+```mdx
+---
+title: 'Your title'
+publishedAt: '2026-07-29'
+summary: 'One or two sentences. This shows up in search results and the RSS feed.'
+image: '/posts/optional-cover.webp'
+---
+```
+
+`title`, `publishedAt` and `summary` are required. `image` is optional — leave it
+out and the site generates an Open Graph image from the title automatically.
+
+### A note on `publishedAt`
+
+Dates must be `YYYY-MM-DD`. A date in the future will sort to the top of the blog
+index and the RSS feed, so double-check the year.
+
+## What you can write
+
+Standard markdown works, plus GitHub-flavoured tables.
+
+| Feature | Supported |
+| --- | --- |
+| Tables | yes |
+| Syntax highlighting | yes |
+| Footnotes | no |
+
+Inline `code`, **bold**, *italic*, and [links](/projects) all render. Fenced code
+blocks are syntax-highlighted:
+
+```ts
+export function greet(name: string) {
+  return `hello, ${name}`
+}
+```
+
+> Blockquotes work too.
+
+Headings automatically get anchor links — hover one to see the `#`.
+
+## Where everything lives
+
+- Posts: `app/blog/posts/*.mdx`
+- Projects: `app/projects/content/*.mdx`
+- Your name, links, bio and SEO copy: `app/lib/profile.ts`
+- Images: `public/` (referenced from frontmatter as `/your-image.webp`)

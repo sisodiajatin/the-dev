@@ -13,7 +13,7 @@ export function Projects({ limit }: ProjectsProps) {
   let allProjects = getProjects()
 
   // Sort projects by date
-  let sortedProjects = allProjects.sort((a, b) => {
+  let sortedProjects = [...allProjects].sort((a, b) => {
     if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
       return -1
     }
@@ -97,8 +97,8 @@ export function Projects({ limit }: ProjectsProps) {
         )
       })}
 
-      {/* 3. Conditional "View All" Button */}
-      {limit && (
+      {/* 3. Conditional "View All" Button — only when the limit hides something */}
+      {limit != null && allProjects.length > limit && (
         <Link
           href="/projects"
           className="inline-flex items-center underline hover:decoration-muted-foreground underline-offset-4"

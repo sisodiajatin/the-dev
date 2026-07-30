@@ -1,43 +1,26 @@
-import Image from "next/image"
-import { HoverLinkPreview } from "./hover-link-preview"
+import CompanyLink from './company-link'
+import { homepage } from 'app/lib/profile'
 
 const Current = () => {
+  const { current, about } = homepage
+
+  if (!current && about.length === 0) return null
+
   return (
     <section>
       <div className="flex flex-col gap-figma-inside-gap">
-        <h2 className="font-semibold italic">
-          Current
-        </h2>
-        <p>ai engineer at{' '}
-          <span className="inline-flex align-middle gap-0.5 bg-white text-black rounded-sm px-0.5 py-0 hover:cursor-pointer hover:bg-white/90 active:bg-white/70 transition leading-4">
-            <Image
-              className="invert"
-              src={"/twospoon-logo-favicon.svg"}
-              alt="favicon"
-              height={12}
-              width={12}
-            />
-            <HoverLinkPreview
-              href="https://twospoon.ai/"
-              previewImage="/previews/twospoon.webp"
-              imageAlt="TwoSpoon.ai preview"
-            >
-              twospoon.ai
-            </HoverLinkPreview>
-          </span>
-          , building intelligent systems that are both scalable and fast. research aptitude with 4 best paper awards and 30+ citations on
-          {' '}
-          <HoverLinkPreview
-            href="https://scholar.google.com/citations?hl=en&user=3mS0Y4wAAAAJ"
-            previewImage="/previews/google-scholar.svg"
-            imageAlt="Google Scholar preview"
-            className="underline hover:decoration-muted-foreground underline-offset-4"
-          >
-            google scholar
-          </HoverLinkPreview>
-          . bachelors' gold medalist. masters student @ IIT Patna and IIIT Ranchi.</p>
-        <p>enjoy coding, content creation, writing, superbikes, and reading ancient greek philosophy & history.</p>
-        <p>i can build <span className="italic font-semibold">anything.</span></p>
+        <h2 className="font-semibold italic">Current</h2>
+
+        {current && (
+          <p>
+            {current.title} at <CompanyLink role={current} chip />
+            {current.location ? ` [${current.location}]` : ''}.
+          </p>
+        )}
+
+        {about.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </div>
     </section>
   )

@@ -1,29 +1,32 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import type { Metadata } from 'next'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate } from 'app/blog/utils'
-import { baseUrl } from 'app/sitemap'
-import { getProjects } from '../utils'
-import Image from 'next/image' // Import Next.js Image
+import { formatDate, getProjects } from 'app/projects/utils'
+import { baseUrl, identity } from 'app/lib/profile'
 import BoxedText from 'app/components/boxed-text'
 
+type PageProps = { params: Promise<{ slug: string }> }
+
 export async function generateStaticParams() {
-  let posts = getProjects()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
+  return getProjects().map((project) => ({ slug: project.slug }))
 }
 
-export async function generateMetadata({ params }) {
-  const { slug } = await params; // Next.js 15 fix
-  let post = getProjects().find((post) => post.slug === slug)
+export async function generateMetadata({ params }: PageProps): Promise<Metadata | undefined> {
+  const { slug } = await params
+  const post = getProjects().find((p) => p.slug === slug)
   if (!post) return
 
-  let { title, publishedAt, summary, image } = post.metadata
-  let ogImage = image ? image : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+  const { title, publishedAt, summary, image } = post.metadata
+  const ogImage = image
+    ? `${baseUrl}${image}`
+    : `${baseUrl}/og?title=${encodeURIComponent(title)}`
 
   return {
     title,
     description: summary,
+    alternates: { canonical: `${baseUrl}/projects/${post.slug}` },
     openGraph: {
       title,
       description: summary,
@@ -41,60 +44,62 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function Project({ params }) {
-  const { slug } = await params; // Next.js 15 fix
-  let post = getProjects().find((post) => post.slug === slug)
+export default async function Project({ params }: PageProps) {
+  const { slug } = await params
+  const post = getProjects().find((p) => p.slug === slug)
 
   if (!post) notFound()
 
-  // Split the tech string into an array: "Next.js, React" -> ["Next.js", "React"]
-  const techStack = post.metadata.tech 
-    ? post.metadata.tech.split(',').map((t) => t.trim()) 
+  // "Next.js, React" -> ["Next.js", "React"]
+  const techStack = post.metadata.tech
+    ? post.metadata.tech.split(',').map((t) => t.trim()).filter(Boolean)
     : []
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    headline: post.metadata.title,
+    datePublished: post.metadata.publishedAt,
+    description: post.metadata.summary,
+    image: post.metadata.image
+      ? `${baseUrl}${post.metadata.image}`
+      : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+    url: `${baseUrl}/projects/${post.slug}`,
+    author: { '@type': 'Person', name: identity.name, url: baseUrl },
+  }
+
   return (
-    <section className='flex flex-col gap-figma-inside-gap'>
+    <section className="flex flex-col gap-figma-inside-gap">
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'CreativeWork', // Changed to valid Schema type
-            headline: post.metadata.title,
-            datePublished: post.metadata.publishedAt,
-            description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${baseUrl}${post.metadata.image}`
-              : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.metadata.title}
-      </h1>
-      
+
+      <h1 className="title font-semibold text-2xl tracking-tighter">{post.metadata.title}</h1>
+
       <div className="flex justify-between items-center mt-2">
-        <p className="text-sm text-muted-foreground">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
+        <p className="text-sm text-muted-foreground">{formatDate(post.metadata.publishedAt)}</p>
+        <Link
+          href="/projects"
+          className="text-sm text-muted-foreground underline hover:text-foreground underline-offset-4"
+        >
+          all projects
+        </Link>
       </div>
 
-      {/* RENDER IMAGE IF EXISTS */}
       {post.metadata.image && (
         <div>
-           <Image 
-             src={post.metadata.image} 
-             alt={post.metadata.title} 
-             width={800} 
-             height={400} 
-             className="rounded-lg border border-border"
-           />
+          <Image
+            src={post.metadata.image}
+            alt={post.metadata.title}
+            width={800}
+            height={400}
+            className="rounded-lg border border-border"
+          />
         </div>
       )}
 
-      {/* RENDER TECH STACK TAGS */}
       {techStack.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-auto">
           {techStack.map((tech) => (
@@ -103,7 +108,7 @@ export default async function Project({ params }) {
         </div>
       )}
 
-      <article className="prose prose-headings:font-semibold prose-a:text-blue-600">
+      <article className="prose prose-headings:font-semibold">
         <CustomMDX source={post.content} />
       </article>
     </section>

@@ -1,16 +1,25 @@
-// Single source of truth for the links the chat AI is allowed to surface
-// as buttons. Constrained to this map so the model can never emit an
-// arbitrary URL — it only picks a key.
-export const PROFILE_LINKS = {
-  instagram: { label: "Open Instagram", url: "https://www.instagram.com/sagar_builds/" },
-  x: { label: "Open X (Twitter)", url: "https://x.com/sagar_builds" },
-  github: { label: "Open GitHub", url: "https://github.com/SAGAR-TAMANG" },
-  linkedin: { label: "Open LinkedIn", url: "https://www.linkedin.com/in/sagar-tmg/" },
-  youtube: { label: "Watch Youtube", url: "https://www.youtube.com/@sagar_builds" },
-  scholar: { label: "Open Google Scholar", url: "https://scholar.google.com/citations?hl=en&user=3mS0Y4wAAAAJ" },
-  resume: { label: "View Resume", url: "/resume.pdf" },
-  email: { label: "Email Sagar", url: "mailto:build@sagartamang.com" },
-  booking: { label: "Book a Call", url: "https://cal.com/sagar-tamang/feynman-pi?user=sagar-tamang" },
-} as const
+// The links the chat AI is allowed to surface as buttons. Built from
+// app/lib/profile.ts so there is exactly one place to edit them, and
+// constrained to a fixed key set so the model can never emit an arbitrary
+// URL — it only picks a key.
+import { identity, links, linkLabels, type LinkKey } from './profile'
 
-export type ProfileLinkKey = keyof typeof PROFILE_LINKS
+export type ProfileLinkKey = LinkKey | 'email'
+
+type ProfileLink = { label: string; url: string }
+
+function buildProfileLinks(): Partial<Record<ProfileLinkKey, ProfileLink>> {
+  const entries: Partial<Record<ProfileLinkKey, ProfileLink>> = {}
+
+  for (const key of Object.keys(linkLabels) as LinkKey[]) {
+    const url = links[key]
+    if (url) entries[key] = { label: linkLabels[key], url }
+  }
+
+  // Email is always available — it is the one contact route the site guarantees.
+  entries.email = { label: `Email ${identity.name.split(' ')[0]}`, url: `mailto:${identity.email}` }
+
+  return entries
+}
+
+export const PROFILE_LINKS = buildProfileLinks()

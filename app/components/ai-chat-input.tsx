@@ -4,14 +4,16 @@ import * as React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Lightbulb, Mic, Globe, Paperclip, Send } from "lucide-react"
 import { AnimatePresence, motion, type Variants } from "motion/react"
+import { identity } from "app/lib/profile"
+
+const FIRST_NAME = identity.name.split(" ")[0].toLowerCase()
 
 const PLACEHOLDERS = [
-  "ask me anything about sagar",
-  "what has sagar built?",
-  "how do i run ai models on android?",
-  "what's sagar's tech stack?",
+  `ask me anything about ${FIRST_NAME}`,
+  `what has ${FIRST_NAME} built?`,
+  `what's ${FIRST_NAME}'s tech stack?`,
   "how can we work together?",
-  "show me sagar's best projects",
+  "show me the best projects",
 ]
 
 type AIChatInputProps = {
@@ -161,7 +163,7 @@ const AIChatInput = ({ onActiveChange, onSendMessage, isLoading = false }: AICha
               onFocus={handleActivate}
               onKeyDown={handleKeyDown}
               disabled={isLoading}
-              aria-label="Ask me anything about Sagar"
+              aria-label={`Ask me anything about ${identity.name}`}
             />
             <div className="absolute left-0 top-0 w-full h-full pointer-events-none flex items-center px-3 py-2">
               <AnimatePresence mode="wait">

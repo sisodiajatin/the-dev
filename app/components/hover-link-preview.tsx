@@ -120,7 +120,8 @@ const PreviewPortal = ({
 
 interface HoverLinkPreviewProps {
   href: string
-  previewImage: string
+  /** Omit to render a plain link with no hover card. */
+  previewImage?: string
   imageAlt?: string
   className?: string
   children: React.ReactNode
@@ -135,6 +136,16 @@ const HoverLinkPreview = ({
   children,
 }: HoverLinkPreviewProps) => {
   const cursor = useCursorPreview()
+
+  // No screenshot on file yet — degrade to an ordinary link rather than
+  // showing an empty card.
+  if (!previewImage) {
+    return (
+      <a href={href} target="_blank" rel="noopener" className={className}>
+        {children}
+      </a>
+    )
+  }
 
   const previewImg = (
     <Image

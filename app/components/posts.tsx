@@ -10,7 +10,7 @@ type BlogPostsProps = {
 export function BlogPosts({ limit }: BlogPostsProps) {
   let allBlogs = getBlogPosts()
 
-  let sortedBlogs = allBlogs.sort((a, b) => {
+  let sortedBlogs = [...allBlogs].sort((a, b) => {
     if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
       return -1
     }
