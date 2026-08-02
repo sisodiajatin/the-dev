@@ -106,6 +106,33 @@ export default function Footer() {
           source
         </a>
       </p>
+
+      {/*
+        Required, not decorative: Skiper UI's free tier makes visible
+        attribution a licence condition, and the crowd behind this footer is
+        theirs. Open Peeps is CC0 and needs no credit, but it costs nothing to
+        give one. Drop this only if you move to Skiper UI Pro.
+      */}
+      <p className="relative z-10 mt-2 text-muted-foreground/60 text-xs">
+        crowd effect by{' '}
+        <a
+          className="underline decoration-muted-foreground/40 underline-offset-4 hover:decoration-muted-foreground"
+          rel="noopener"
+          target="_blank"
+          href="https://skiper-ui.com"
+        >
+          skiper ui
+        </a>
+        , illustrations by{' '}
+        <a
+          className="underline decoration-muted-foreground/40 underline-offset-4 hover:decoration-muted-foreground"
+          rel="noopener"
+          target="_blank"
+          href="https://www.openpeeps.com"
+        >
+          open peeps
+        </a>
+      </p>
     </footer>
   )
 }

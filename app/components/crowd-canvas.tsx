@@ -36,8 +36,11 @@ const randomIndex = (array: unknown[]) => (randomRange(0, array.length) | 0)
  * A crowd of sprite-sheet figures walking across a canvas.
  *
  * Adapted from Skiper UI's Skiper39, itself adapted from
- * https://codepen.io/zadvorsky/pen/xxwbBQV. Attribution to Skiper UI is
- * required by its free-tier licence — see the note in app/lab/crowd/page.tsx.
+ * https://codepen.io/zadvorsky/pen/xxwbBQV. Illustrations are Open Peeps
+ * (CC0) by Pablo Stanley.
+ *
+ * Skiper UI's free tier REQUIRES visible attribution, which is why the footer
+ * carries a credit line. Remove the credit only if you move to Skiper UI Pro.
  */
 export default function CrowdCanvas({
   src,
