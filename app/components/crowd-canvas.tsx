@@ -24,6 +24,8 @@ type CrowdCanvasProps = {
   columns?: number
   /** Figures down the sheet. */
   rows?: number
+  /** Multiplier on the drawn figure size. 1 = the sheet's native cell size. */
+  scale?: number
   className?: string
 }
 
@@ -41,6 +43,7 @@ export default function CrowdCanvas({
   src,
   columns = 15,
   rows = 7,
+  scale = 1,
   className,
 }: CrowdCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -73,8 +76,9 @@ export default function CrowdCanvas({
     const resetPeep = (peep: Peep) => {
       const facingRight = Math.random() > 0.5
       // Bias figures towards the bottom of the stage so the crowd reads as
-      // depth rather than a flat band.
-      const offsetY = 100 - 250 * gsap.parseEase('power2.in')(Math.random())
+      // depth rather than a flat band. Scaled with the figures, otherwise a
+      // small crowd spreads over the same vertical range as a full-size one.
+      const offsetY = (100 - 250 * gsap.parseEase('power2.in')(Math.random())) * scale
       const startY = stage.height - peep.height + offsetY
 
       const startX = facingRight ? -peep.width : stage.width + peep.width
@@ -99,7 +103,7 @@ export default function CrowdCanvas({
       // The vertical bob that sells it as walking rather than sliding.
       tl.to(
         peep,
-        { duration: yDuration, repeat: xDuration / yDuration, yoyo: true, y: startY - 10 },
+        { duration: yDuration, repeat: xDuration / yDuration, yoyo: true, y: startY - 10 * scale },
         0
       )
       return tl
@@ -172,8 +176,10 @@ export default function CrowdCanvas({
             cellWidth,
             cellHeight,
           ],
-          width: cellWidth,
-          height: cellHeight,
+          // rect stays in the sheet's own coordinates; the drawn size is what
+          // scales, so drawImage does the resampling for us.
+          width: cellWidth * scale,
+          height: cellHeight * scale,
           x: 0,
           y: 0,
           anchorY: 0,
@@ -191,11 +197,30 @@ export default function CrowdCanvas({
       resizeTimer = setTimeout(resize, 150)
     }
 
+    // The footer sits below the fold on most pages, so leaving the ticker
+    // running would burn frames animating something nobody is looking at.
+    let ticking = false
+    const startTicker = () => {
+      if (ticking || reduceMotion) return
+      gsap.ticker.add(render)
+      ticking = true
+    }
+    const stopTicker = () => {
+      if (!ticking) return
+      gsap.ticker.remove(render)
+      ticking = false
+    }
+
+    const visibility = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? startTicker() : stopTicker()),
+      { rootMargin: '100px' }
+    )
+
     img.onload = () => {
       if (disposed) return
       createPeeps()
       resize()
-      gsap.ticker.add(render)
+      visibility.observe(canvas)
       window.addEventListener('resize', handleResize)
     }
     img.onerror = () => {
@@ -206,13 +231,14 @@ export default function CrowdCanvas({
     return () => {
       disposed = true
       clearTimeout(resizeTimer)
+      visibility.disconnect()
       window.removeEventListener('resize', handleResize)
-      gsap.ticker.remove(render)
+      stopTicker()
       crowd.forEach((peep) => peep.walk?.kill())
       img.onload = null
       img.onerror = null
     }
-  }, [src, columns, rows])
+  }, [src, columns, rows, scale])
 
   // Decorative: conveys nothing a screen reader needs.
   return <canvas ref={canvasRef} aria-hidden="true" className={className} />

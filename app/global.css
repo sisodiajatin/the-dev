@@ -64,6 +64,16 @@ html {
   min-width: 360px;
 }
 
+/* The footer's full-bleed crowd is sized in vw, which counts the vertical
+   scrollbar and would otherwise let the page scroll sideways by a few pixels.
+   `clip` rather than `hidden` so neither element becomes a scroll container.
+   The root needs a non-visible value too: while html is `visible`, body's
+   overflow propagates to the viewport instead of applying to body. */
+html,
+body {
+  overflow-x: clip;
+}
+
 .prose .anchor {
   @apply absolute invisible no-underline;
 

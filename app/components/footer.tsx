@@ -9,6 +9,7 @@ import {
   SiGooglescholar,
 } from 'react-icons/si'
 import { activeLinks, identity, linkLabels, links, repoUrl, type LinkKey } from 'app/lib/profile'
+import CrowdCanvas from './crowd-canvas'
 
 function RssIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -34,14 +35,43 @@ const SOCIAL_ICONS: Partial<Record<LinkKey, IconType>> = {
 const LINK_CLASS =
   'underline decoration-foreground hover:decoration-muted-foreground underline-offset-4'
 
+// Fades the crowd in from the top and back out at the feet, so figures are
+// never cut off by a hard edge.
+const MASK = 'linear-gradient(to bottom, transparent, #000 45%, #000 72%, transparent)'
+
 export default function Footer() {
   const socials = activeLinks
     .filter((key) => SOCIAL_ICONS[key])
     .map((key) => ({ name: key, url: links[key] as string, Icon: SOCIAL_ICONS[key] as IconType }))
 
   return (
-    <footer>
-      <ul className="mt-8 flex flex-row space-x-4">
+    <footer className="relative pb-24">
+      {/*
+        Full-bleed crowd behind the footer. Blending is doing the work here:
+        the figures are shrunk, drained of colour to sit a shade above the
+        page background, and dissolved at both edges so nothing hard-clips —
+        they walk out of the dark and back into it.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 left-1/2 z-0 h-56 w-screen -translate-x-1/2 overflow-hidden"
+        style={{
+          maskImage: MASK,
+          WebkitMaskImage: MASK,
+          filter: 'grayscale(1) brightness(0.85)',
+          opacity: 0.5,
+        }}
+      >
+        <CrowdCanvas
+          src="/images/peeps/all-peeps.png"
+          columns={15}
+          rows={7}
+          scale={0.5}
+          className="absolute bottom-0 h-full w-full"
+        />
+      </div>
+
+      <ul className="relative z-10 mt-8 flex flex-row space-x-4">
         {socials.map((link) => (
           <li key={link.name}>
             <a
@@ -66,7 +96,7 @@ export default function Footer() {
         </li>
       </ul>
 
-      <p className="mt-8 text-muted-foreground text-sm">
+      <p className="relative z-10 mt-8 text-muted-foreground text-sm">
         © {new Date().getFullYear()} {identity.name} | MIT licensed |{' '}
         <a className={LINK_CLASS} rel="noopener" target="_blank" href={repoUrl}>
           source
