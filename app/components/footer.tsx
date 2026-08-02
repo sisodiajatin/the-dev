@@ -58,15 +58,19 @@ export default function Footer() {
         style={{
           maskImage: MASK,
           WebkitMaskImage: MASK,
-          filter: 'grayscale(1) brightness(0.85)',
-          opacity: 0.5,
+          // The Open Peeps sheet is already black-and-white, so grayscale is a
+          // no-op today — it is here so a colour sheet would still blend if the
+          // artwork is ever swapped. brightness pulls the white fills down to a
+          // grey that sits just above the page background.
+          filter: 'grayscale(1) brightness(0.75)',
+          opacity: 0.45,
         }}
       >
         <CrowdCanvas
           src="/images/peeps/all-peeps.png"
           columns={15}
           rows={7}
-          scale={0.5}
+          scale={0.35}
           className="absolute bottom-0 h-full w-full"
         />
       </div>

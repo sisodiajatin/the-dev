@@ -54,7 +54,7 @@ export default function CrowdLabPage() {
       />
 
       <p className="absolute bottom-3 left-6 z-20 text-[11px] opacity-40">
-        placeholder sprites — the real effect uses openpeeps.com illustrations
+        illustrations by openpeeps.com (CC0) · effect adapted from Skiper UI
       </p>
     </div>
   )
