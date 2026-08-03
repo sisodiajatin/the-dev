@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getProjects } from 'app/projects/utils'
 import { localOnly } from 'app/lib/mdx-content'
+import { readImageSize } from 'app/lib/image-size'
 import { baseUrl, identity } from 'app/lib/profile'
 import BoxedText from 'app/components/boxed-text'
 
@@ -55,6 +56,8 @@ export default async function Project({ params }: PageProps) {
 
   if (!post) notFound()
 
+  const imageSize = post.metadata.image ? readImageSize(post.metadata.image) : null
+
   // "Next.js, React" -> ["Next.js", "React"]
   const techStack = post.metadata.tech
     ? post.metadata.tech.split(',').map((t) => t.trim()).filter(Boolean)
@@ -95,12 +98,18 @@ export default async function Project({ params }: PageProps) {
 
       {post.metadata.image && (
         <div>
+          {/*
+            Real dimensions read from the file header, so the reserved box
+            matches the image: no squashing, and no shift when it decodes.
+            Falls back to 2:1 if the format is not one we can read.
+          */}
           <Image
             src={post.metadata.image}
             alt={post.metadata.title}
-            width={800}
-            height={400}
-            className="rounded-lg border border-border"
+            width={imageSize?.width ?? 800}
+            height={imageSize?.height ?? 400}
+            sizes="(max-width: 768px) 100vw, 672px"
+            className="w-full h-auto rounded-lg border border-border"
           />
         </div>
       )}
