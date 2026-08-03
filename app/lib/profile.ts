@@ -51,12 +51,18 @@ export const identity = {
    * number of people, whereas a named stack is scannable and is what a
    * recruiter is actually searching for.
    *
+   * NOTE: c++ is on your resume under Languages, but unlike the other three
+   * nothing on this site backs it up — no project, no job, no repo. c#/.net is
+   * the opposite: production work at WebCraft-IT. Worth shipping a C++ project
+   * so the tag has something behind it if a recruiter follows through.
+   *
    * Alternatives, if you'd rather aim somewhere else:
+   *   ['c#/.net', 'python', 'react', 'aws']         — leads with your evidenced production stack
    *   ['python', 'typescript', 'react', 'docker']   — leans web/product
    *   ['apis', 'real-time systems', 'ai tooling']   — what you build, not what with
    *   ['backend', 'full-stack', 'apis', 'cloud']    — the previous, generic set
    */
-  tags: ['c#/.net', 'python', 'react', 'aws'],
+  tags: ['c++', 'python', 'react', 'aws'],
 } as const
 
 // ── Links ────────────────────────────────────────────────────────────────────
