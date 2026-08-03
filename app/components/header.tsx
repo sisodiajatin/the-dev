@@ -22,7 +22,9 @@ const MainHeader = () => {
 
             {identity.tags.length > 0 && (
               <div className="font-semibold italic text-sm">
-                <BoxedText text={identity.tags.join(',')} />
+                {/* Middle dots rather than commas: the chip sets tight
+                    tracking, and comma-joined tags run together. */}
+                <BoxedText text={identity.tags.join(' · ')} />
               </div>
             )}
 

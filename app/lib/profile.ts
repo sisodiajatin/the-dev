@@ -45,8 +45,18 @@ export const identity = {
     english: 'Worcester, MA',
   },
 
-  /** Small chips under your name on the homepage. Keep them short. */
-  tags: ['backend', 'full-stack', 'apis', 'cloud'],
+  /**
+   * The chip under your name. Concrete technologies read better here than
+   * disciplines — "backend, full-stack, apis, cloud" describes a very large
+   * number of people, whereas a named stack is scannable and is what a
+   * recruiter is actually searching for.
+   *
+   * Alternatives, if you'd rather aim somewhere else:
+   *   ['python', 'typescript', 'react', 'docker']   — leans web/product
+   *   ['apis', 'real-time systems', 'ai tooling']   — what you build, not what with
+   *   ['backend', 'full-stack', 'apis', 'cloud']    — the previous, generic set
+   */
+  tags: ['c#/.net', 'python', 'react', 'aws'],
 } as const
 
 // ── Links ────────────────────────────────────────────────────────────────────
