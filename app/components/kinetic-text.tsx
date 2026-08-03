@@ -1,7 +1,31 @@
 'use client'
 
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
+
+/**
+ * Hydration-safe reduced-motion preference.
+ *
+ * motion's own useReducedMotion reads matchMedia *during render* and never
+ * sets it on the server, so a visitor with the setting enabled gets one tree
+ * from the server and a structurally different one on hydration — a mismatch
+ * that makes React throw away the server HTML. Starting at `false` and
+ * correcting in an effect keeps the first client render identical to the
+ * server's. It also tracks later changes, which motion's version does not.
+ */
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false)
+
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReduced(query.matches)
+    sync()
+    query.addEventListener('change', sync)
+    return () => query.removeEventListener('change', sync)
+  }, [])
+
+  return reduced
+}
 
 type KineticTextProps = {
   /** Words cycled in place. */
@@ -21,7 +45,7 @@ type KineticTextProps = {
  */
 export default function KineticText({ words, interval = 2500, className }: KineticTextProps) {
   const [index, setIndex] = useState(0)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = usePrefersReducedMotion()
 
   useEffect(() => {
     if (reduceMotion || words.length < 2) return

@@ -49,7 +49,7 @@ export function BlogPosts({ limit }: BlogPostsProps) {
             preview={
               <PreviewCard
                 title={title}
-                eyebrow={formatDate(publishedAt, false)}
+                eyebrow={formatDate(publishedAt)}
                 footer={host}
                 seed={post.slug}
               />
@@ -57,7 +57,7 @@ export function BlogPosts({ limit }: BlogPostsProps) {
           >
             <div className="w-full grid grid-cols-[8rem_1fr] md:grid-cols-[9rem_1fr] items-baseline gap-2">
               <p className="text-muted-foreground tabular-nums">
-                {formatDate(publishedAt, false)}
+                {formatDate(publishedAt)}
               </p>
               <p className="text-foreground tracking-tight underline hover:decoration-muted-foreground underline-offset-4">
                 {title}

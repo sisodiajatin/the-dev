@@ -89,28 +89,13 @@ export function readContentDir(dir: string): ContentEntry[] {
   return [...entries]
 }
 
-export function formatDate(date: string, includeRelative = false): string {
-  const currentDate = new Date()
+export function formatDate(date: string): string {
   const iso = date.includes('T') ? date : `${date}T00:00:00`
   const targetDate = new Date(iso)
 
-  const fullDate = targetDate.toLocaleString('en-us', {
+  return targetDate.toLocaleString('en-us', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
   })
-
-  if (!includeRelative) return fullDate
-
-  const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
-  const monthsAgo = currentDate.getMonth() - targetDate.getMonth()
-  const daysAgo = currentDate.getDate() - targetDate.getDate()
-
-  let relative: string
-  if (yearsAgo > 0) relative = `${yearsAgo}y ago`
-  else if (monthsAgo > 0) relative = `${monthsAgo}mo ago`
-  else if (daysAgo > 0) relative = `${daysAgo}d ago`
-  else relative = 'Today'
-
-  return `${fullDate} (${relative})`
 }

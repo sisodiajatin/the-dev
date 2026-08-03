@@ -88,9 +88,25 @@ function Code({ children, ...props }: React.ComponentProps<'code'>) {
   return <code {...props} dangerouslySetInnerHTML={{ __html: highlight(children) }} />
 }
 
-function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
+/**
+ * Keeps every heading id unique within one document.
+ *
+ * Two headings with the same text otherwise produce the same id: invalid
+ * HTML, and every anchor to it jumps to the first one. A heading made only of
+ * emoji or punctuation slugifies to an empty string, which would emit id="".
+ */
+function uniqueSlug(base: string, used: Set<string>): string {
+  const root = base || 'section'
+  let slug = root
+  let n = 2
+  while (used.has(slug)) slug = `${root}-${n++}`
+  used.add(slug)
+  return slug
+}
+
+function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6, usedSlugs: Set<string>) {
   const Heading = ({ children }: { children?: React.ReactNode }) => {
-    const slug = slugify(children)
+    const slug = uniqueSlug(slugify(children), usedSlugs)
     return React.createElement(
       `h${level}`,
       { id: slug },
@@ -110,25 +126,33 @@ function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   return Heading
 }
 
-const components = {
-  h1: createHeading(1),
-  h2: createHeading(2),
-  h3: createHeading(3),
-  h4: createHeading(4),
-  h5: createHeading(5),
-  h6: createHeading(6),
-  Image: RoundedImage,
-  img: MarkdownImage,
-  a: CustomLink,
-  code: Code,
-  Table,
+// Built per document rather than once at module scope, so the set of used
+// slugs cannot leak between pages.
+function createComponents(usedSlugs: Set<string>) {
+  return {
+    h1: createHeading(1, usedSlugs),
+    h2: createHeading(2, usedSlugs),
+    h3: createHeading(3, usedSlugs),
+    h4: createHeading(4, usedSlugs),
+    h5: createHeading(5, usedSlugs),
+    h6: createHeading(6, usedSlugs),
+    Image: RoundedImage,
+    img: MarkdownImage,
+    a: CustomLink,
+    code: Code,
+    Table,
+  }
 }
 
 export function CustomMDX(props: MDXRemoteProps) {
+  // One set per document: heading ids are unique within a page, and a fresh
+  // render never inherits slugs from a previous one.
+  const usedSlugs = new Set<string>()
+
   return (
     <MDXRemote
       {...props}
-      components={{ ...components, ...(props.components || {}) }}
+      components={{ ...createComponents(usedSlugs), ...(props.components || {}) }}
       options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
     />
   )

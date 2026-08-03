@@ -23,6 +23,11 @@ export function readImageSize(publicPath: string): ImageSize | null {
     // files, so a whole-file read is simpler than juggling file descriptors.
     buf = fs.readFileSync(file).subarray(0, 65536)
   } catch {
+    // A typo'd path would otherwise ship a broken image with nothing to show
+    // for it — the page still renders, but say so while developing.
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`readImageSize: no file at public${publicPath}`)
+    }
     return null
   }
 

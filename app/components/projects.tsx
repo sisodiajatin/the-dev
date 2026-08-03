@@ -50,7 +50,7 @@ export function Projects({ limit }: ProjectsProps) {
                   {project.metadata.title}
                 </h2>
                 <p className="text-muted-foreground tabular-nums shrink-0 ml-4">
-                  {formatDate(project.metadata.publishedAt, false)}
+                  {formatDate(project.metadata.publishedAt)}
                 </p>
               </div>
 
@@ -81,7 +81,7 @@ export function Projects({ limit }: ProjectsProps) {
         ) : (
           <PreviewCard
             title={project.metadata.title}
-            eyebrow={formatDate(project.metadata.publishedAt, false)}
+            eyebrow={formatDate(project.metadata.publishedAt)}
             footer={techStack[0]}
             seed={project.slug}
           />
