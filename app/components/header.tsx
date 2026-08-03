@@ -1,4 +1,5 @@
 import BoxedText from './boxed-text'
+import KineticText from './kinetic-text'
 import { homepage, identity } from 'app/lib/profile'
 
 const MainHeader = () => {
@@ -25,7 +26,10 @@ const MainHeader = () => {
               </div>
             )}
 
-            <p className="italic">{homepage.tagline}</p>
+            <p className="italic">
+              {homepage.tagline}{' '}
+              <KineticText words={homepage.taglineWords} />
+            </p>
 
             {identity.handle && <p className="sr-only">@{identity.handle}</p>}
           </div>

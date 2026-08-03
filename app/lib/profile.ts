@@ -114,8 +114,15 @@ export type Role = {
 }
 
 export const homepage = {
-  /** Short line under your name. */
-  tagline: 'i build apis, platforms, and real-time systems',
+  /** Static first half of the short line under your name. */
+  tagline: 'i build',
+
+  /**
+   * Words cycled in place after the tagline. Two or more animates; one (or
+   * none) renders as plain text, as does a visitor with reduced motion — they
+   * get the full phrase "apis, platforms, and real-time systems" instead.
+   */
+  taglineWords: ['apis', 'platforms', 'real-time systems'] as readonly string[],
 
   /**
    * Your current position. Left undefined — your resume shows the MS at WPI
