@@ -151,9 +151,6 @@ export const homepage = {
   /** Free-text paragraphs. Each string is one <p>. The main "about me". */
   about: [
     'software engineer with an ms in computer science from worcester polytechnic institute, and production experience building rest apis, full-stack platforms, and real-time systems in c#/asp.net, python, node.js, and react.',
-    // Inferred from the resume: the WPI MS ran to May 2026 and no role overlaps
-    // it. Rewrite this in your own words — it is the first thing a recruiter reads.
-    'recently finished my ms at wpi. currently building side projects and open to software engineering roles.',
   ] as readonly string[],
 
   /** Past positions, newest first. */
