@@ -35,6 +35,10 @@ const SOCIAL_ICONS: Partial<Record<LinkKey, IconType>> = {
 const LINK_CLASS =
   'underline decoration-foreground hover:decoration-muted-foreground underline-offset-4'
 
+// 44x44 is the minimum comfortable touch target; the icon inside stays 16px.
+const ICON_LINK_CLASS =
+  'flex h-11 w-11 items-center justify-center transition-colors text-muted-foreground hover:text-foreground'
+
 // Fades the crowd in from the top and back out at the feet, so figures are
 // never cut off by a hard edge.
 const MASK = 'linear-gradient(to bottom, transparent, #000 45%, #000 72%, transparent)'
@@ -75,11 +79,14 @@ export default function Footer() {
         />
       </div>
 
-      <ul className="relative z-10 mt-8 flex flex-row space-x-4">
+      {/* 44x44 hit areas rather than the bare 16px icons — the icons stay the
+          same size, the tappable box around them does not. Pulled left so the
+          first icon still lines up with the text column. */}
+      <ul className="relative z-10 mt-6 -ml-3.5 flex flex-row gap-2">
         {socials.map((link) => (
           <li key={link.name}>
             <a
-              className="flex items-center transition-all text-muted-foreground hover:text-foreground"
+              className={ICON_LINK_CLASS}
               rel="noopener"
               target="_blank"
               href={link.url}
@@ -91,7 +98,7 @@ export default function Footer() {
         ))}
         <li>
           <a
-            className="flex items-center transition-all text-muted-foreground hover:text-foreground"
+            className={ICON_LINK_CLASS}
             href="/rss"
             aria-label="rss"
           >
@@ -113,7 +120,10 @@ export default function Footer() {
         theirs. Open Peeps is CC0 and needs no credit, but it costs nothing to
         give one. Drop this only if you move to Skiper UI Pro.
       */}
-      <p className="relative z-10 mt-2 text-muted-foreground/60 text-xs">
+      {/* /75 not /60: at 12px this needs 4.5:1 against the page, and 60%
+          opacity landed at 3.43:1. 75% measures 4.89:1 and still reads as
+          quieter than the line above it. */}
+      <p className="relative z-10 mt-2 text-muted-foreground/75 text-xs">
         crowd effect by{' '}
         <a
           className="underline decoration-muted-foreground/40 underline-offset-4 hover:decoration-muted-foreground"
