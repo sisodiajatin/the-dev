@@ -61,7 +61,9 @@
 
 html {
   color-scheme: dark;
-  min-width: 360px;
+  /* No min-width: it forced the document to 360px, so anything narrower — an
+     iPhone SE, a small Android, or a zoomed-in browser — scrolled sideways by
+     40px. The layout is fluid down to 320px without it. */
 }
 
 /* The footer's full-bleed crowd is sized in vw, which counts the vertical
