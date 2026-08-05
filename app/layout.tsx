@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
+import SmoothScroll from './components/smooth-scroll'
 import { baseUrl, identity, seo } from './lib/profile'
 import { Manrope, Playfair } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
@@ -97,6 +98,7 @@ export default function RootLayout({
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           {children}
           <Footer />
+          <SmoothScroll />
           <Analytics />
           <SpeedInsights />
           {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
