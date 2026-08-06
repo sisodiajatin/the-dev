@@ -5,9 +5,16 @@ export type ContentMetadata = {
   title: string
   publishedAt: string
   summary: string
+  /** Detail-page cover (and list fallback when thumbnail is omitted). */
   image?: string
+  /** List + hover thumb; falls back to image. Projects only. */
+  thumbnail?: string
   /** Comma-separated tech list; projects only. */
   tech?: string
+  /** Repo / source URL; projects only. */
+  source?: string
+  /** Live demo URL; projects only. */
+  demo?: string
   /**
    * Set when the piece lives somewhere else (dev.to, a company blog). The
    * entry still appears in listings and the RSS feed, but no page is built
@@ -27,9 +34,9 @@ export function localOnly(entries: ContentEntry[]): ContentEntry[] {
   return entries.filter((e) => !e.metadata.externalUrl)
 }
 
-// Anchored to the start of the file so a `---` divider inside the body can
-// never be mistaken for the frontmatter block.
-const FRONTMATTER_RE = /^---\s*([\s\S]*?)\s*---/
+// Closing fence must be on its own line — otherwise a value containing `---`
+// (e.g. a GitHub URL like `Argus---Ai-Code-Review`) truncates the block early.
+const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/
 
 export function parseFrontmatter(fileContent: string): {
   metadata: ContentMetadata

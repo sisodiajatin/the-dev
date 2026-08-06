@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section>
-      <h1 className="font-semibold mb-8">Writing</h1>
+    <section className="flex flex-col gap-figma-inside-gap">
+      <h1 className="font-semibold italic">Writing</h1>
       <BlogPosts />
     </section>
   )

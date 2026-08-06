@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
+import Nav from './components/nav'
 import SmoothScroll from './components/smooth-scroll'
 import { baseUrl, identity, seo } from './lib/profile'
 import { Manrope, Playfair } from 'next/font/google'
@@ -95,7 +96,8 @@ export default function RootLayout({
       className={cx('text-foreground bg-background', playfair.variable, manrope.variable)}
     >
       <body className="font-serif antialiased max-w-2xl mx-auto px-4 my-16 lg:my-24 text-sm md:text-base tracking-tight lowercase">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+        <main className="flex-auto min-w-0 flex flex-col">
+          <Nav />
           {children}
           <Footer />
           <SmoothScroll />

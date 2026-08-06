@@ -77,7 +77,7 @@ export function BlogPosts({ limit }: BlogPostsProps) {
           href="/blog"
           className="inline-flex items-center underline hover:decoration-muted-foreground underline-offset-4"
         >
-          Read all writings
+          Read all writing
         </Link>
       )}
     </div>

@@ -80,7 +80,7 @@ export default function KineticText({ words, interval = 2500, className }: Kinet
   // setting exists to stop — fall back to the full phrase, which says the
   // same thing without moving.
   if (reduceMotion || words.length < 2) {
-    return <span className={className}>{formatList(words)}</span>
+    return <span className={`text-accent-solid ${className ?? ''}`}>{formatList(words)}</span>
   }
 
   // The longest word reserves the width, so swapping never reflows the line.
@@ -102,7 +102,7 @@ export default function KineticText({ words, interval = 2500, className }: Kinet
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={words[index]}
-            className="whitespace-nowrap"
+            className="whitespace-nowrap text-accent-solid"
             initial={{ opacity: 0, y: '0.35em', filter: 'blur(4px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             exit={{ opacity: 0, y: '-0.35em', filter: 'blur(4px)' }}

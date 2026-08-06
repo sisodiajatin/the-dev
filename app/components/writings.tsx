@@ -8,7 +8,7 @@ const Writings = () => {
   return (
     <section>
       <div className="flex flex-col gap-figma-inside-gap">
-        <h2 className="font-semibold italic">Writings</h2>
+        <h2 className="font-semibold italic">Writing</h2>
         <BlogPosts limit={3} />
       </div>
     </section>

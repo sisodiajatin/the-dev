@@ -79,14 +79,14 @@ export default async function Blog({ params }: PageProps) {
   }
 
   return (
-    <section>
+    <section className="flex flex-col gap-figma-inside-gap">
       <script
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="title font-semibold tracking-tighter">{post.metadata.title}</h1>
-      <div className="flex justify-between items-center mt-2 mb-8">
+      <h1 className="title font-semibold italic tracking-tight">{post.metadata.title}</h1>
+      <div className="flex justify-between items-center">
         <p className="text-muted-foreground">{formatDate(post.metadata.publishedAt)}</p>
         <Link
           href="/blog"

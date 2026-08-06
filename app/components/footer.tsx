@@ -82,7 +82,7 @@ export default function Footer() {
       {/* 44x44 hit areas rather than the bare 16px icons — the icons stay the
           same size, the tappable box around them does not. Pulled left so the
           first icon still lines up with the text column. */}
-      <ul className="relative z-10 mt-6 -ml-3.5 flex flex-row gap-2">
+      <ul className="relative z-10 mt-figma-outside-gap -ml-3.5 flex flex-row gap-2">
         {socials.map((link) => (
           <li key={link.name}>
             <a
@@ -107,7 +107,7 @@ export default function Footer() {
         </li>
       </ul>
 
-      <p className="relative z-10 mt-8 text-muted-foreground text-sm">
+      <p className="relative z-10 mt-figma-inside-gap text-muted-foreground text-sm">
         © {new Date().getFullYear()} {identity.name} | MIT licensed |{' '}
         <a className={LINK_CLASS} rel="noopener" target="_blank" href={repoUrl}>
           source

@@ -5,7 +5,6 @@ import BoxedText from './boxed-text'
 import { HoverPreviewLink } from './hover-link-preview'
 import { PreviewCard, PREVIEW_WIDTH, PREVIEW_HEIGHT } from './preview-card'
 
-// 1. Define Props to make the limit optional
 type ProjectsProps = {
   limit?: number
 }
@@ -13,13 +12,11 @@ type ProjectsProps = {
 export function Projects({ limit }: ProjectsProps) {
   let allProjects = getProjects()
 
-  // Sort projects by date, newest first
   let sortedProjects = [...allProjects].sort(
     (a, b) =>
       new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
   )
 
-  // 2. Slice the array if a limit is provided
   let displayedProjects = limit ? sortedProjects.slice(0, limit) : sortedProjects
 
   return (
@@ -29,36 +26,45 @@ export function Projects({ limit }: ProjectsProps) {
           ? project.metadata.tech.split(',').map((t) => t.trim())
           : []
 
-        const rowClassName = "group flex flex-col md:flex-row md:gap-4 items-start mb-4 md:mb-0"
+        const thumb = project.metadata.thumbnail ?? project.metadata.image
+
+        const rowClassName =
+          'group flex flex-col md:flex-row md:gap-figma-inside-gap items-start'
         const rowContent = (
           <>
-            <div className="w-full md:w-40 shrink-0 relative aspect-video md:aspect-[4/3] rounded-lg overflow-hidden bg-secondary border border-border">
-              {project.metadata.image && (
+            <div className="w-full md:w-52 shrink-0 relative aspect-video rounded-lg overflow-hidden bg-secondary border border-border">
+              {thumb && (
                 <Image
-                  src={project.metadata.image}
+                  src={thumb}
                   alt={project.metadata.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 200px"
+                  className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 208px"
                 />
               )}
             </div>
 
-            <div className="flex flex-col flex-1 min-w-0">
-              <div className="flex justify-between items-baseline mb-1">
-                <h2 className="font-semibold tracking-tight text-foreground underline hover:decoration-muted-foreground underline-offset-4">
+            <div className="flex flex-col flex-1 min-w-0 gap-1">
+              <div className="flex justify-between items-baseline gap-2">
+                <h2 className="font-semibold tracking-tight text-foreground underline decoration-foreground/40 group-hover:decoration-muted-foreground underline-offset-4 transition-[text-decoration-color]">
                   {project.metadata.title}
+                  <span
+                    aria-hidden="true"
+                    className="ml-1.5 inline text-muted-foreground opacity-70 md:hidden"
+                  >
+                    →
+                  </span>
                 </h2>
-                <p className="text-muted-foreground tabular-nums shrink-0 ml-4">
+                <p className="text-muted-foreground tabular-nums shrink-0 text-sm">
                   {formatDate(project.metadata.publishedAt)}
                 </p>
               </div>
 
-              <p className="text-muted-foreground line-clamp-2 mb-1">
+              <p className="text-muted-foreground line-clamp-2">
                 {project.metadata.summary}
               </p>
 
-              <div className="flex flex-wrap gap-2 mt-auto">
+              <div className="flex flex-wrap gap-2 mt-1">
                 {techStack.map((tech) => (
                   <BoxedText key={tech} text={tech} />
                 ))}
@@ -67,11 +73,9 @@ export function Projects({ limit }: ProjectsProps) {
           </>
         )
 
-        // Screenshot when the project has one, generated card otherwise, so
-        // every row gets a hover preview either way.
-        const preview = project.metadata.image ? (
+        const preview = thumb ? (
           <Image
-            src={project.metadata.image}
+            src={thumb}
             alt={project.metadata.title}
             width={PREVIEW_WIDTH}
             height={PREVIEW_HEIGHT}
@@ -87,8 +91,6 @@ export function Projects({ limit }: ProjectsProps) {
           />
         )
 
-        // A project hosted elsewhere has no page here — link straight to it,
-        // the same way externally-published writing works.
         const externalUrl = project.metadata.externalUrl
 
         return (
@@ -104,7 +106,6 @@ export function Projects({ limit }: ProjectsProps) {
         )
       })}
 
-      {/* 3. Conditional "View All" Button — only when the limit hides something */}
       {limit != null && allProjects.length > limit && (
         <Link
           href="/projects"

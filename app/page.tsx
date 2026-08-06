@@ -4,6 +4,7 @@ import Previous from './components/previous'
 import Writings from './components/writings'
 import Builds from './components/builds'
 import Contact from './components/contact'
+import Reveal from './components/reveal'
 import { baseUrl, dossier, homepage, identity, sameAs } from './lib/profile'
 
 export default function Page() {
@@ -15,7 +16,7 @@ export default function Page() {
     name: identity.name,
     ...(identity.handle ? { alternateName: [identity.handle, `@${identity.handle}`] } : {}),
     url: baseUrl,
-    image: `${baseUrl}/icon.png`,
+    image: `${baseUrl}/icon`,
     jobTitle: identity.role,
     ...(homepage.current
       ? {
@@ -37,12 +38,24 @@ export default function Page() {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <MainHeader />
-      <Current />
-      <Previous />
-      <Writings />
-      <Builds />
-      <Contact />
+      <Reveal index={0}>
+        <MainHeader />
+      </Reveal>
+      <Reveal index={1}>
+        <Current />
+      </Reveal>
+      <Reveal index={2}>
+        <Previous />
+      </Reveal>
+      <Reveal index={3}>
+        <Writings />
+      </Reveal>
+      <Reveal index={4}>
+        <Builds />
+      </Reveal>
+      <Reveal index={5}>
+        <Contact />
+      </Reveal>
     </div>
   )
 }
