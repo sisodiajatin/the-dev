@@ -42,7 +42,7 @@ export const identity = {
 
   location: {
     native: undefined as string | undefined,
-    english: 'Columbia, MD',
+    english: 'Jersey City, NJ',
   },
 
   /**
@@ -181,12 +181,12 @@ export const seo = {
   titleDefault: `${identity.name}${displayHandle} | ${identity.role}`,
   titleTemplate: `%s | ${identity.name}`,
   description:
-    'Jatin Sisodia — Software Engineer in Columbia, MD. MS in Computer Science from WPI. ' +
+    'Jatin Sisodia — Software Engineer in Jersey City, NJ. MS in Computer Science from WPI. ' +
     'Builds REST APIs, full-stack platforms, and real-time systems with C#/ASP.NET, Python, Node.js, and React.',
   keywords: [
     'Jatin Sisodia',
     'Software Engineer',
-    'Columbia MD',
+    'Jersey City NJ',
     'C#',
     'ASP.NET',
     'Python',
@@ -222,7 +222,7 @@ export const dossier = {
   summary:
     'Software Engineer with an MS in Computer Science from Worcester Polytechnic Institute and production ' +
     'experience building REST APIs, full-stack platforms, and real-time systems using C#/ASP.NET, Python, ' +
-    'Node.js, and React. Based in Columbia, Maryland.',
+    'Node.js, and React. Based in Jersey City, New Jersey.',
 
   experience: [
     'WebCraft-IT — Software Developer, Aug 2023–Jun 2024. Built 10+ modules of a commodity trading platform ' +
