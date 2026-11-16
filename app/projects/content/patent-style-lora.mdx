@@ -1,0 +1,35 @@
+---
+title: 'Patent Style LoRA — SDXL Drawing Adapter'
+publishedAt: '2026-11-01'
+summary: 'An SDXL LoRA trained on 24 public-domain design-patent figures that turns any object into a black-line patent-style drawing, evaluated against prompt-only baselines.'
+tech: 'Python, PyTorch, Diffusers, SDXL, LoRA, Hugging Face, Google Colab'
+image: '/images/patent-style-lora.png'
+source: 'https://github.com/sisodiajatin/patent-style-lora'
+---
+
+A style LoRA for Stable Diffusion XL that renders any object as a US patent-style
+drawing: black lines on a white page with a single centered figure. Built as a
+learning project to test whether a small adapter actually beats a well-written
+prompt ("patent drawing, black and white line art").
+
+## How it was built
+
+Training data is 24 hand-picked figures from public-domain US design patents
+(DeepPatent), cleaned, padded to 1024×1024 and captioned with a trigger word, view
+and object only, with no style words. Training used the Diffusers SDXL LoRA script
+(rank 16, learning rate 1e-4) on a Colab GPU. The first run, UNet only, failed with
+coloured backgrounds and a weak trigger. The second added a noise offset and
+text-encoder training, which fixed both. Checkpoint 1,500 of 3,000 was kept, since
+later checkpoints overfit.
+
+## Evaluation
+
+Prompts and seeds were fixed and the baselines rendered before training: 10 subjects
+(6 unseen) across 3 seeds. On unseen objects the LoRA produced a white page 99.8% of
+the time versus 44.0% for the patent-drawing prompt and 0.1% for a plain prompt, with
+gray shading cut from 74.6% to 3.8% and the CLIP subject score slightly higher
+(0.316 vs 0.301). The metrics don't catch fake text, extra objects or impossible
+parts, and the outputs are illustrations rather than valid patent drawings.
+
+The adapter is published on Hugging Face (`Jatin1999/patent-style-lora`), and the
+repo includes the Colab notebooks, configs, eval prompts and a Gradio demo app.
